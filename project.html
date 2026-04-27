@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>项目详情 · 吴欣</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --border: #e5e7eb;
+      --border-subtle: #f3f4f6;
+      --text-primary: #09090b;
+      --text-secondary: #374151;
+      --text-muted: #9ca3af;
+      --accent: #10b981;
+      --accent-light: #d1fae5;
+      --accent-text: #065f46;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* ── 导航 ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 100;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+    nav.scrolled { border-bottom-color: var(--border-subtle); }
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--text-primary); }
+    .back-label-title { display: none; }
+    .nav-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 400px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ── 内容区 ── */
+    main {
+      max-width: 1224px;
+      margin: 0 auto;
+      padding: 80px 24px 80px;
+      counter-reset: section;
+    }
+
+    /* ── 块间距系统 ── */
+    /* 默认：内容块之间 32px */
+    .block { margin-bottom: 32px; }
+    .block:last-child { margin-bottom: 0; }
+
+    /* 图片类块下方留更多空气 */
+    .block-image-single,
+    .block-image-duo,
+    .block-image-stack,
+    .block-image-text,
+    .block-video { margin-bottom: 48px; }
+
+    /* H2 上方是新章节入口，需要大间距 */
+    .block-h2 { margin-top: 72px; }
+    /* H2 紧接 H1 时间距收小 */
+    .block-h1 + .block-h2 { margin-top: 40px; }
+
+    /* H3 上方留呼吸空间 */
+    .block-h3 { margin-top: 40px; }
+    .block-h2 + .block-h3 { margin-top: 20px; }
+
+    /* 标题后第一个内容块，间距收紧 */
+    .block-h1 + .block,
+    .block-h2 + .block,
+    .block-h3 + .block { margin-top: -8px; }
+
+    /* ── H1：项目主标题 ── */
+    .block-h1 {
+      font-size: 2.125rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      color: var(--text-primary);
+      max-width: 950px;
+      margin-bottom: 20px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    /* ── H2：章节标题（带自动序号） ── */
+    .block-h2 {
+      font-size: 1.375rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.3;
+      color: var(--text-primary);
+      max-width: 950px;
+      margin-bottom: 16px;
+      counter-increment: section;
+    }
+    .block-h2::before {
+      content: "0" counter(section) " ·";
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    /* ── H3：小节标题 ── */
+    .block-h3 {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      line-height: 1.4;
+      color: var(--text-primary);
+      max-width: 950px;
+      margin-bottom: 12px;
+    }
+
+    /* ── 正文块 ── */
+    .block-body {
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--text-secondary);
+      max-width: 950px;
+    }
+
+    /* ── 引用块 ── */
+    .block-quote {
+      border-left: 3px solid var(--accent);
+      padding: 14px 20px;
+      background: #f0fdf4;
+      border-radius: 0 10px 10px 0;
+      font-size: 15px;
+      font-style: normal;
+      color: var(--accent-text);
+      line-height: 1.8;
+      max-width: 950px;
+    }
+
+    /* ── 图片通用 caption ── */
+    .img-caption {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.5;
+      letter-spacing: 0.01em;
+    }
+
+    /* ── 单张图片 ── */
+    .block-image-single img {
+      width: 100%;
+      border-radius: 14px;
+      display: block;
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* ── 左右图 ── */
+    .block-image-duo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .image-duo-item img {
+      width: 100%;
+      border-radius: 14px;
+      display: block;
+      border: 1px solid var(--border-subtle);
+    }
+    .image-duo-item .img-caption { text-align: center; }
+
+    /* ── 图片轮播 ── */
+    .carousel {
+      position: relative;
+      overflow: hidden;
+      border-radius: 14px;
+      background: var(--border-subtle);
+      border: 1px solid var(--border-subtle);
+    }
+    .carousel-track {
+      display: flex;
+      transition: transform 0.3s ease;
+    }
+    .carousel-track img {
+      width: 100%;
+      flex-shrink: 0;
+      display: block;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+    }
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.95);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      transition: background 0.15s;
+      z-index: 2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .carousel-btn:hover { background: white; }
+    .carousel-btn-prev { left: 14px; }
+    .carousel-btn-next { right: 14px; }
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .carousel-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .carousel-dot.active { background: var(--accent); }
+
+    /* ── 图片拼接（堆叠）── */
+    .block-image-stack { display: flex; flex-direction: column; gap: 16px; }
+    .stack-item { display: flex; flex-direction: column; gap: 8px; }
+    .stack-item img {
+      width: 100%;
+      display: block;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+    }
+    .stack-item .img-caption {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* ── 图文混排 ── */
+    .block-image-text {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .block-image-text.layout-right .it-img { order: 2; }
+    .block-image-text.layout-right .it-text { order: 1; }
+    .block-image-text img {
+      width: 100%;
+      border-radius: 14px;
+      display: block;
+      border: 1px solid var(--border-subtle);
+    }
+    .it-text {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--text-secondary);
+    }
+
+    /* ── 视频块 ── */
+    .block-video video {
+      width: 100%;
+      border-radius: 14px;
+      display: block;
+      aspect-ratio: 16/9;
+      background: #000;
+    }
+    .video-embed {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+    }
+    .video-embed iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    /* ── 底部翻页 ── */
+    .project-nav {
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 40px 48px 64px;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .project-nav a {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .project-nav a:hover { color: var(--text-primary); }
+    .project-nav a.hidden { visibility: hidden; }
+
+    /* ── Lightbox ── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      cursor: zoom-out;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .lightbox.active { opacity: 1; pointer-events: all; }
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 8px;
+      cursor: default;
+    }
+    .zoomable { cursor: zoom-in; }
+
+    /* ── PPT 查看器（左侧目录 + 右侧垂直滚动） ── */
+    .block-ppt-viewer {
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+    }
+    .ppt-toc {
+      position: sticky;
+      top: 72px;
+      width: 148px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: calc(100vh - 88px);
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+    .ppt-toc::-webkit-scrollbar { width: 3px; }
+    .ppt-toc::-webkit-scrollbar-track { background: transparent; }
+    .ppt-toc::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 2px; }
+    .ppt-toc-item {
+      position: relative;
+      cursor: pointer;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      transition: border-color 0.15s;
+      flex-shrink: 0;
+    }
+    .ppt-toc-item:hover { border-color: #d1d5db; }
+    .ppt-toc-item.active { border-color: var(--accent); }
+    .ppt-toc-item img {
+      width: 100%;
+      display: block;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+    }
+    .ppt-toc-num {
+      position: absolute;
+      bottom: 4px;
+      left: 5px;
+      font-size: 9px;
+      font-weight: 700;
+      color: rgba(0,0,0,0.35);
+      line-height: 1;
+    }
+    .ppt-slides {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .ppt-slide-item img {
+      width: 100%;
+      display: block;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .ppt-slide-item img.loaded { opacity: 1; }
+    .ppt-slide-video video {
+      width: 100%;
+      display: block;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      background: #000;
+    }
+
+    /* ── 骨架屏 ── */
+    .ppt-skeleton {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 14px;
+      background: #f0f0f0;
+      overflow: hidden;
+      position: relative;
+    }
+    .ppt-skeleton::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255,255,255,0.7) 40%,
+        rgba(255,255,255,0.9) 50%,
+        rgba(255,255,255,0.7) 60%,
+        transparent 100%
+      );
+      background-size: 200% 100%;
+      animation: skeleton-shimmer 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes skeleton-shimmer {
+      0%   { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    /* 缩略图骨架 */
+    .ppt-toc-skeleton {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 4px;
+      background: #ebebeb;
+      overflow: hidden;
+      position: relative;
+    }
+    .ppt-toc-skeleton::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255,255,255,0.6) 50%,
+        transparent 100%
+      );
+      background-size: 200% 100%;
+      animation: skeleton-shimmer 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    .ppt-toc-item img {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .ppt-toc-item img.loaded { opacity: 1; }
+
+    /* ── 响应式 ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; height: 52px; }
+      .nav-title { display: none; }
+      .back-label-home { display: none; }
+      .back-label-title { display: inline; }
+      main { padding: 68px 20px 60px; }
+      .block-h1, .block-h2, .block-h3, .block-body, .block-quote { max-width: 100%; }
+      .block-image-text { grid-template-columns: 1fr; gap: 20px; }
+      .block-image-text.layout-right .it-img,
+      .block-image-text.layout-right .it-text { order: unset; }
+      .project-nav { padding: 32px 20px 48px; }
+      .ppt-toc { display: none; }
+      .block-ppt-viewer { display: block; }
+      .ppt-slides { width: 100%; }
+      .ppt-slide-item img { border-radius: 8px; }
+      .ppt-slide-video video { border-radius: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar">
+    <a href="#" class="nav-back" id="nav-back-btn">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="back-label-home">返回首页</span>
+      <span class="back-label-title" id="back-label-title"></span>
+    </a>
+    <span class="nav-title" id="nav-title"></span>
+    <div style="width: 80px"></div>
+  </nav>
+
+  <main id="content"></main>
+
+  <div class="project-nav" id="project-nav">
+    <a id="prev-link" href="#" class="hidden">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      上一个项目
+    </a>
+    <a id="next-link" href="#" class="hidden">
+      下一个项目
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+
+  <div class="lightbox" id="lightbox">
+    <img id="lightbox-img" src="" alt="">
+  </div>
+
+  <script>
+    // ── 导航滚动边框 ──
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+    // ── Lightbox ──
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+
+    function openLightbox(src) {
+      lightboxImg.src = src;
+      lightbox.classList.add('active');
+    }
+
+    lightbox.addEventListener('click', () => lightbox.classList.remove('active'));
+    lightboxImg.addEventListener('click', e => e.stopPropagation());
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') lightbox.classList.remove('active');
+    });
+
+    // ── Block 渲染器 ──
+    function renderBlock(block) {
+      switch (block.type) {
+        case 'heading':        return renderHeading(block);
+        case 'body':           return renderBody(block);
+        case 'quote':          return renderQuote(block);
+        case 'image-single':   return renderImageSingle(block);
+        case 'image-duo':      return renderImageDuo(block);
+        case 'image-carousel': return renderImageCarousel(block);
+        case 'image-stack':    return renderImageStack(block);
+        case 'image-text':     return renderImageText(block);
+        case 'video':          return renderVideo(block);
+        case 'ppt-viewer':     return renderPptViewer(block);
+        default:
+          return document.createElement('div');
+      }
+    }
+
+    // 将 contenteditable 输出的 HTML 转为正常渲染用的 HTML：
+    // contenteditable 用 <div> 换行，需转成 <br>；首行不加 <br>
+    function normalizeRichText(raw) {
+      return (raw || '')
+        .replace(/<div>/gi, '<br>')
+        .replace(/<\/div>/gi, '')
+        .replace(/^(<br\s*\/?>)+/i, '');
+    }
+
+    function renderHeading(block) {
+      const level = Math.min(Math.max(parseInt(block.level) || 1, 1), 3);
+      const el = document.createElement('h' + level);
+      el.className = 'block block-h' + level;
+      el.innerHTML = normalizeRichText(block.content);
+      return el;
+    }
+
+    function renderBody(block) {
+      const p = document.createElement('p');
+      p.className = 'block block-body';
+      p.innerHTML = normalizeRichText(block.content);
+      return p;
+    }
+
+    function renderQuote(block) {
+      const div = document.createElement('div');
+      div.className = 'block block-quote';
+      div.innerHTML = normalizeRichText(block.content);
+      return div;
+    }
+
+    function renderImageDuo(block) {
+      const wrap = document.createElement('div');
+      wrap.className = 'block block-image-duo';
+      (block.images || ['', '']).forEach((src, i) => {
+        const item = document.createElement('div');
+        item.className = 'image-duo-item';
+        if (src) {
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = (block.captions && block.captions[i]) || '';
+          img.className = 'zoomable';
+          img.addEventListener('click', () => openLightbox(src));
+          item.appendChild(img);
+        }
+        const cap = (block.captions && block.captions[i]) ? block.captions[i] : '';
+        if (cap) {
+          const p = document.createElement('p');
+          p.className = 'img-caption';
+          p.textContent = cap;
+          item.appendChild(p);
+        }
+        wrap.appendChild(item);
+      });
+      return wrap;
+    }
+
+    function renderImageSingle(block) {
+      const wrap = document.createElement('div');
+      wrap.className = 'block block-image-single';
+      const img = document.createElement('img');
+      img.src = block.src;
+      img.alt = block.caption || '';
+      img.className = 'zoomable';
+      img.addEventListener('click', () => openLightbox(block.src));
+      wrap.appendChild(img);
+      if (block.caption) {
+        const cap = document.createElement('p');
+        cap.className = 'img-caption';
+        cap.textContent = block.caption;
+        wrap.appendChild(cap);
+      }
+      return wrap;
+    }
+
+    function renderImageCarousel(block) {
+      const wrap = document.createElement('div');
+      wrap.className = 'block';
+
+      const carousel = document.createElement('div');
+      carousel.className = 'carousel';
+
+      const track = document.createElement('div');
+      track.className = 'carousel-track';
+      block.images.forEach((src, i) => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = (block.captions && block.captions[i]) || '';
+        img.className = 'zoomable';
+        img.addEventListener('click', () => openLightbox(src));
+        track.appendChild(img);
+      });
+      carousel.appendChild(track);
+
+      const prevBtn = document.createElement('button');
+      prevBtn.className = 'carousel-btn carousel-btn-prev';
+      prevBtn.innerHTML = '&#8249;';
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'carousel-btn carousel-btn-next';
+      nextBtn.innerHTML = '&#8250;';
+      carousel.appendChild(prevBtn);
+      carousel.appendChild(nextBtn);
+      wrap.appendChild(carousel);
+
+      const dotsWrap = document.createElement('div');
+      dotsWrap.className = 'carousel-dots';
+      const dotEls = block.images.map((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+        dot.addEventListener('click', () => goTo(i));
+        dotsWrap.appendChild(dot);
+        return dot;
+      });
+      wrap.appendChild(dotsWrap);
+
+      let current = 0;
+      function goTo(idx) {
+        current = Math.max(0, Math.min(idx, block.images.length - 1));
+        track.style.transform = 'translateX(-' + (current * 100) + '%)';
+        dotEls.forEach((d, i) => d.classList.toggle('active', i === current));
+      }
+      prevBtn.addEventListener('click', () => goTo(current - 1));
+      nextBtn.addEventListener('click', () => goTo(current + 1));
+
+      return wrap;
+    }
+
+    function renderImageStack(block) {
+      const wrap = document.createElement('div');
+      wrap.className = 'block block-image-stack';
+      (block.images || []).forEach((src, i) => {
+        const item = document.createElement('div');
+        item.className = 'stack-item';
+
+        const img = document.createElement('img');
+        img.src = src;
+        img.className = 'zoomable';
+        img.addEventListener('click', () => openLightbox(src));
+        item.appendChild(img);
+
+        const cap = (block.captions && block.captions[i]) || '';
+        if (cap) {
+          const capEl = document.createElement('p');
+          capEl.className = 'img-caption';
+          capEl.textContent = cap;
+          item.appendChild(capEl);
+        }
+
+        wrap.appendChild(item);
+      });
+      return wrap;
+    }
+
+    function renderImageText(block) {
+      const wrap = document.createElement('div');
+      wrap.className = 'block block-image-text' + (block.layout === 'right' ? ' layout-right' : '');
+
+      const imgWrap = document.createElement('div');
+      imgWrap.className = 'it-img';
+      const img = document.createElement('img');
+      img.src = block.image;
+      img.alt = block.caption || '';
+      img.className = 'zoomable';
+      img.addEventListener('click', () => openLightbox(block.image));
+      imgWrap.appendChild(img);
+      if (block.caption) {
+        const cap = document.createElement('p');
+        cap.className = 'img-caption';
+        cap.textContent = block.caption;
+        imgWrap.appendChild(cap);
+      }
+
+      const text = document.createElement('div');
+      text.className = 'it-text';
+      (block.text || '').split('\n').forEach((line, i) => {
+        if (i > 0) text.appendChild(document.createElement('br'));
+        text.appendChild(document.createTextNode(line));
+      });
+
+      wrap.appendChild(imgWrap);
+      wrap.appendChild(text);
+      return wrap;
+    }
+
+    function renderVideo(block) {
+      const wrap = document.createElement('div');
+      wrap.className = 'block block-video';
+      if (block.videoType === 'upload') {
+        const video = document.createElement('video');
+        video.controls = true;
+        video.playsInline = true;
+        video.src = block.src;
+        if (block.poster) video.poster = block.poster;
+        wrap.appendChild(video);
+      } else {
+        const embedDiv = document.createElement('div');
+        embedDiv.className = 'video-embed';
+        const iframe = document.createElement('iframe');
+        iframe.allowFullscreen = true;
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        if (block.url.includes('bilibili.com') || block.url.includes('b23.tv')) {
+          const bvMatch = block.url.match(/BV[\w]+/);
+          iframe.src = bvMatch
+            ? 'https://player.bilibili.com/player.html?bvid=' + bvMatch[0] + '&page=1&high_quality=1'
+            : block.url;
+        } else if (block.url.includes('youtube.com') || block.url.includes('youtu.be')) {
+          const ytMatch = block.url.match(/(?:v=|youtu\.be\/)([^&?/]+)/);
+          iframe.src = ytMatch
+            ? 'https://www.youtube.com/embed/' + ytMatch[1]
+            : block.url;
+        } else {
+          iframe.src = block.url;
+        }
+        embedDiv.appendChild(iframe);
+        wrap.appendChild(embedDiv);
+      }
+      return wrap;
+    }
+
+    function renderPptViewer(block) {
+      const images = block.images || [];
+
+      const wrap = document.createElement('div');
+      wrap.className = 'block block-ppt-viewer';
+
+      const toc = document.createElement('div');
+      toc.className = 'ppt-toc';
+
+      const slides = document.createElement('div');
+      slides.className = 'ppt-slides';
+
+      const slideEls = [];
+      const tocItems = [];
+      // 存储每张图片的加载任务
+      const loadTasks = [];
+
+      images.forEach((src, i) => {
+        // ── 左侧缩略图 ──
+        const tocItem = document.createElement('div');
+        tocItem.className = 'ppt-toc-item' + (i === 0 ? ' active' : '');
+
+        const tocSkeleton = document.createElement('div');
+        tocSkeleton.className = 'ppt-toc-skeleton';
+        tocItem.appendChild(tocSkeleton);
+
+        const thumb = document.createElement('img');
+        thumb.alt = '第 ' + (i + 1) + ' 张';
+        thumb.style.display = 'none';
+        thumb.addEventListener('load', () => {
+          tocSkeleton.style.display = 'none';
+          thumb.style.display = 'block';
+          thumb.classList.add('loaded');
+        });
+        tocItem.appendChild(thumb);
+
+        const num = document.createElement('span');
+        num.className = 'ppt-toc-num';
+        num.textContent = i + 1;
+        tocItem.appendChild(num);
+
+        tocItem.addEventListener('click', () => {
+          slideEls[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+        toc.appendChild(tocItem);
+        tocItems.push(tocItem);
+
+        // ── 右侧主图 ──
+        const slideItem = document.createElement('div');
+        slideItem.className = 'ppt-slide-item';
+
+        const skeleton = document.createElement('div');
+        skeleton.className = 'ppt-skeleton';
+        slideItem.appendChild(skeleton);
+
+        const img = document.createElement('img');
+        img.alt = '幻灯片 ' + (i + 1);
+        img.className = 'zoomable';
+        img.style.display = 'none';
+        img.addEventListener('load', () => {
+          skeleton.style.display = 'none';
+          img.style.display = 'block';
+          // 下一帧触发过渡动画
+          requestAnimationFrame(() => img.classList.add('loaded'));
+        });
+        img.addEventListener('click', () => openLightbox(src));
+        slideItem.appendChild(img);
+
+        slides.appendChild(slideItem);
+        slideEls.push(slideItem);
+
+        loadTasks.push({ img, thumb, src });
+      });
+
+      // ── 逐张加载（上一张完成后再加载下一张） ──
+      function loadNext(idx) {
+        if (idx >= loadTasks.length) return;
+        const { img, thumb, src } = loadTasks[idx];
+        img.addEventListener('load',  () => loadNext(idx + 1), { once: true });
+        img.addEventListener('error', () => loadNext(idx + 1), { once: true });
+        img.src = src;
+        thumb.src = src;
+      }
+      loadNext(0);
+
+      // ── 可选视频（放在图片最下方，宽度与图片一致） ──
+      if (block.video) {
+        const videoWrap = document.createElement('div');
+        videoWrap.className = 'ppt-slide-video';
+        const video = document.createElement('video');
+        video.controls = true;
+        video.playsInline = true;
+        video.src = block.video.src;
+        if (block.video.poster) video.poster = block.video.poster;
+        videoWrap.appendChild(video);
+        slides.appendChild(videoWrap);
+      }
+
+      // ── 滚动高亮目录 ──
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const idx = slideEls.indexOf(entry.target);
+            if (idx !== -1) {
+              tocItems.forEach((t, i) => t.classList.toggle('active', i === idx));
+              tocItems[idx].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }
+          }
+        });
+      }, { threshold: 0.4 });
+
+      slideEls.forEach(el => observer.observe(el));
+
+      wrap.appendChild(toc);
+      wrap.appendChild(slides);
+      return wrap;
+    }
+
+    // ── 加载项目 ──
+    const params = new URLSearchParams(location.search);
+    const id = parseInt(params.get('id')) || 1;
+
+    // 返回首页时锚定到当前项目卡片
+    document.getElementById('nav-back-btn').href = 'index.html#project-' + id;
+
+    function renderProject(project, projects) {
+      document.title = project.title + ' · 吴欣';
+      document.getElementById('nav-title').textContent = project.title;
+      document.getElementById('back-label-title').textContent = project.title;
+
+      const content = document.getElementById('content');
+      content.innerHTML = '';
+      project.blocks.forEach(block => {
+        content.appendChild(renderBlock(block));
+      });
+
+      const idx = projects.findIndex(p => p.id === id);
+      const prev = projects[idx - 1];
+      const next = projects[idx + 1];
+      const prevLink = document.getElementById('prev-link');
+      const nextLink = document.getElementById('next-link');
+      prevLink.className = 'nav-prev hidden';
+      nextLink.className = 'nav-next hidden';
+
+      if (prev) {
+        prevLink.href = 'project.html?id=' + prev.id;
+        prevLink.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        prevLink.appendChild(document.createTextNode(prev.title));
+        prevLink.classList.remove('hidden');
+      }
+      if (next) {
+        nextLink.href = 'project.html?id=' + next.id;
+        nextLink.textContent = '';
+        nextLink.appendChild(document.createTextNode(next.title));
+        nextLink.insertAdjacentHTML('beforeend', '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+        nextLink.classList.remove('hidden');
+      }
+    }
+
+    fetch('data/projects.json').then(r => r.json()).then(projects => {
+      fetch('data/project-' + id + '.json').then(r => {
+        if (!r.ok) throw new Error('项目不存在');
+        return r.json();
+      }).then(project => renderProject(project, projects))
+        .catch(err => {
+          const errP = document.createElement('p');
+          errP.style.cssText = 'color:var(--text-muted);padding:40px 0';
+          errP.textContent = '项目内容加载失败：' + err.message;
+          document.getElementById('content').appendChild(errP);
+        });
+    }).catch(err => {
+      const errP = document.createElement('p');
+      errP.style.cssText = 'color:var(--text-muted);padding:40px 0';
+      errP.textContent = '加载失败：' + err.message;
+      document.getElementById('content').appendChild(errP);
+    });
+  </script>
+</body>
+</html>

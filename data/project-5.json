@@ -1,0 +1,25 @@
+{
+  "id": 5,
+  "title": "AI 科学易用性调研 · agent 开发",
+  "blocks": [
+    {
+      "id": "b5_ppt",
+      "type": "ppt-viewer",
+      "images": [
+        "assets/images/projects/p5-slide-1.png",
+        "assets/images/projects/p5-slide-2.png",
+        "assets/images/projects/p5-slide-3.png",
+        "assets/images/projects/p5-slide-4.png",
+        "assets/images/projects/p5-slide-5.png",
+        "assets/images/projects/p5-slide-6.png",
+        "assets/images/projects/p5-slide-7.png",
+        "assets/images/projects/p5-slide-8.png",
+        "assets/images/projects/p5-slide-9.png",
+        "assets/images/projects/p5-slide-10.png",
+        "assets/images/projects/p5-slide-11.png",
+        "assets/images/projects/p5-slide-12.png",
+        "assets/images/projects/p5-slide-13.png"
+      ]
+    }
+  ]
+}

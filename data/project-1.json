@@ -1,0 +1,23 @@
+{
+  "id": 1,
+  "title": "奇思妙问 · 国内首家教育数字人探索式对话",
+  "blocks": [
+    {
+      "id": "b1_ppt",
+      "type": "ppt-viewer",
+      "images": [
+        "assets/images/projects/p1-slide-1.png",
+        "assets/images/projects/p1-slide-2.png",
+        "assets/images/projects/p1-slide-3.png",
+        "assets/images/projects/p1-slide-4.png",
+        "assets/images/projects/p1-slide-5.png",
+        "assets/images/projects/p1-slide-6.png",
+        "assets/images/projects/p1-slide-7.png"
+      ],
+      "video": {
+        "src": "assets/videos/p1-demo.mp4",
+        "poster": "assets/videos/p1-demo-poster.jpg"
+      }
+    }
+  ]
+}

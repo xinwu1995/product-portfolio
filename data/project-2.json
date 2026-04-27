@@ -1,0 +1,34 @@
+{
+  "id": 2,
+  "title": "必胜客 APP",
+  "blocks": [
+    {
+      "id": "b2_ppt",
+      "type": "ppt-viewer",
+      "images": [
+        "assets/images/projects/p2-slide-1.jpg",
+        "assets/images/projects/p2-slide-2.jpg",
+        "assets/images/projects/p2-slide-3.jpg",
+        "assets/images/projects/p2-slide-4.jpg",
+        "assets/images/projects/p2-slide-5.jpg",
+        "assets/images/projects/p2-slide-6.jpg",
+        "assets/images/projects/p2-slide-7.jpg",
+        "assets/images/projects/p2-slide-8.jpg",
+        "assets/images/projects/p2-slide-9.jpg",
+        "assets/images/projects/p2-slide-10.jpg",
+        "assets/images/projects/p2-slide-11.jpg",
+        "assets/images/projects/p2-slide-12.jpg",
+        "assets/images/projects/p2-slide-13.jpg",
+        "assets/images/projects/p2-slide-14.jpg",
+        "assets/images/projects/p2-slide-15.jpg",
+        "assets/images/projects/p2-slide-16.jpg",
+        "assets/images/projects/p2-slide-17.jpg",
+        "assets/images/projects/p2-slide-18.jpg",
+        "assets/images/projects/p2-slide-19.jpg",
+        "assets/images/projects/p2-slide-20.jpg",
+        "assets/images/projects/p2-slide-21.jpg",
+        "assets/images/projects/p2-slide-22.jpg"
+      ]
+    }
+  ]
+}

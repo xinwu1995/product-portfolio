@@ -1,0 +1,21 @@
+{
+  "id": 3,
+  "title": "SaaS 教务平台",
+  "blocks": [
+    {
+      "id": "b3_ppt",
+      "type": "ppt-viewer",
+      "images": [
+        "assets/images/projects/p3-slide-1.png",
+        "assets/images/projects/p3-slide-2.png",
+        "assets/images/projects/p3-slide-3.png",
+        "assets/images/projects/p3-slide-4.png",
+        "assets/images/projects/p3-slide-5.png",
+        "assets/images/projects/p3-slide-6.png",
+        "assets/images/projects/p3-slide-7.png",
+        "assets/images/projects/p3-slide-8.png",
+        "assets/images/projects/p3-slide-9.png"
+      ]
+    }
+  ]
+}
